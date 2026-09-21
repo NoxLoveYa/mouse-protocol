@@ -207,5 +207,13 @@
   },
   "sideEffects": [
     "./dist/drivers/orbital/host-protocol.js"
-  ]
+  ],
+  "dependencies": {
+    "@openmouse/controller-protocol": "github:OpenMouse-Project/controller-protocol"
+  },
+  "allowScripts": {
+    "github:OpenMouse-Project/controller-protocol#52c7a36e133aa1c5b621fed6b388205f91eeeb26": true,
+    "esbuild@0.28.2": true,
+    "fsevents@2.3.3": true
+  }
 }
