@@ -223,7 +223,7 @@ export class AtkHidClient {
   }
 
   getDebounceMaxMs(): number {
-    return this.isR1() ? R1_DEBOUNCE_MAX_MS : DEBOUNCE_MAX_MS;
+    return this.isR1() || this.isF1Ultimate() ? R1_DEBOUNCE_MAX_MS : DEBOUNCE_MAX_MS;
   }
 
   getDebounceOptions(): readonly number[] {

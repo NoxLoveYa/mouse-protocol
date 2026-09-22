@@ -788,6 +788,18 @@ test("F1 Ultimate setAngleSnapping writes the advanced straight-line flag", asyn
   assert.deepEqual(Array.from(wrote(fake).subarray(5, 15)).slice(6, 8), [1, 84]);
 });
 
+test("F1 Ultimate debounce accepts the HUB-listed 20 ms ceiling", async () => {
+  const fake = device(0x11d9, "Wireless mouse 8k dongle-L");
+  (fake as unknown as FakeAtkDevice).replies = [
+    reply(0x10, 0x0000, [0x01, 0x08]),
+    reply(0x08, 0x00a9, [0x01, 0x54, 0x01, 0x54, 0xb4, 0xa1, 0x00, 0x55, 0x00, 0x55]),
+    reply(0x08, 0x00a9, [0x14, 0x41, 0x01, 0x54, 0xb4, 0xa1, 0x00, 0x55, 0x00, 0x55]),
+  ];
+  const client = new AtkHidClient(fake);
+  assert.equal(await client.setDebounceTime(20), 20);
+  assert.equal(client.getDebounceMaxMs(), 20);
+});
+
 test("an unrecognised identity on the same receiver keeps the dongle name", async () => {
   const fake = device(0x11d9, "Wireless mouse 8k dongle-L");
   (fake as unknown as FakeAtkDevice).replies = [
