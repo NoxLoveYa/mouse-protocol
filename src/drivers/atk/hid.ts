@@ -766,23 +766,24 @@ export class AtkHidClient {
   }
 
   /**
-   * Sensor mode (@0x00b5) and anti-mistouch (system row bytes 6-7) read
-   * together; either failing rejects the pair so callers never show a
-   * half-read state.
+   * Sensor mode (@0x00b5) and anti-mistouch (system row bytes 6-7), read
+   * independently so one unreadable row never hides the other.
    */
   private async readF1Extras(): Promise<{
-    sensorMode: number;
-    antiMistouchMs: number;
-  } | null> {
-    const performance = await this.read(ATK_SENSOR_PERFORMANCE_REGISTER, 6);
-    const system = await this.read(REGISTER.system, 10);
-    const sensorMode = atkDecodeSensorMode(performance);
-    const antiMistouchMs = atkDecodeAntiMistouch(
-      system[ATK_ANTI_MISTOUCH_OFFSET]!,
-      system[ATK_ANTI_MISTOUCH_OFFSET + 1]!,
-    );
-    if (sensorMode === null || antiMistouchMs === null) return null;
-    return { sensorMode, antiMistouchMs };
+    sensorMode: number | null;
+    antiMistouchMs: number | null;
+  }> {
+    const performance = await this.read(ATK_SENSOR_PERFORMANCE_REGISTER, 6).catch(() => null);
+    const system = await this.read(REGISTER.system, 10).catch(() => null);
+    return {
+      sensorMode: performance ? atkDecodeSensorMode(performance) : null,
+      antiMistouchMs: system
+        ? atkDecodeAntiMistouch(
+          system[ATK_ANTI_MISTOUCH_OFFSET]!,
+          system[ATK_ANTI_MISTOUCH_OFFSET + 1]!,
+        )
+        : null,
+    };
   }
 
   /** Write one sensor mode and require readback; F1 Ultimate only. */

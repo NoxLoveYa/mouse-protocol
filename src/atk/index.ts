@@ -593,21 +593,23 @@ export type AtkSensorMode = (typeof ATK_SENSOR_MODES)[number];
 /** EEPROM address of the 6-byte sensor-performance row. */
 export const ATK_SENSOR_PERFORMANCE_REGISTER = 0x00b5;
 
-/** Fixed prefix bytes of the sensor-performance row on the F1 Ultimate 2.0. */
-export const ATK_SENSOR_PERFORMANCE_PREFIX: readonly number[] = [0, 0x55, 6, 0x4f];
+/**
+ * Stable marker bytes of the sensor-performance row on the F1 Ultimate 2.0.
+ * Bytes 0-1 vary (`[0, 0x55]` in HUB-written rows, `[1, 0x54]` live) and carry
+ * an unknown field, so decoding only trusts bytes 2-3 plus the mode pair.
+ */
+export const ATK_SENSOR_PERFORMANCE_MARKER: readonly number[] = [6, 0x4f];
 
 /** Build the 6-byte sensor-performance row for a mode, or null when invalid. */
 export function atkPackSensorMode(mode: number): number[] | null {
   if (!Number.isInteger(mode) || mode < 0 || mode > 2) return null;
-  return [...ATK_SENSOR_PERFORMANCE_PREFIX, mode, (CHECKSUM_TOTAL - mode) & 0xff];
+  return [0, CHECKSUM_TOTAL, ...ATK_SENSOR_PERFORMANCE_MARKER, mode, (CHECKSUM_TOTAL - mode) & 0xff];
 }
 
 /** Decode the mode of a 6-byte sensor-performance row, or null when invalid. */
 export function atkDecodeSensorMode(data: Uint8Array | readonly number[]): number | null {
   if (data.length < 6) return null;
-  for (let index = 0; index < ATK_SENSOR_PERFORMANCE_PREFIX.length; index += 1) {
-    if (data[index] !== ATK_SENSOR_PERFORMANCE_PREFIX[index]) return null;
-  }
+  if (data[2] !== ATK_SENSOR_PERFORMANCE_MARKER[0] || data[3] !== ATK_SENSOR_PERFORMANCE_MARKER[1]) return null;
   const mode = data[4]!;
   if (!Number.isInteger(mode) || mode < 0 || mode > 2) return null;
   if (((mode + data[5]!) & 0xff) !== CHECKSUM_TOTAL) return null;

@@ -356,6 +356,14 @@ test("F1 Ultimate sensor modes pack the captured 0x00b5 rows", () => {
   assert.equal(atkDecodeSensorMode([1, 2, 3]), null);
 });
 
+test("F1 Ultimate sensor decode accepts the live row whose first pair varies", () => {
+  // HUB-written rows carry [0, 0x55] first; a live localhost readStatus
+  // returned [1, 0x54] with mode 1 (Shard) in bytes 4-5.
+  assert.equal(atkDecodeSensorMode([1, 0x54, 6, 0x4f, 1, 0x54]), 1);
+  assert.equal(atkDecodeSensorMode([1, 0x54, 6, 0x4f, 2, 0x53]), 2);
+  assert.equal(atkDecodeSensorMode([0, 0x55, 0, 0x00, 1, 0x54]), null);
+});
+
 test("F1 Ultimate anti-mistouch pairs encode 10 ms units", () => {
   assert.deepEqual(atkPackAntiMistouch(0), [0, 0x55]);
   assert.deepEqual(atkPackAntiMistouch(100), [10, 75]);
