@@ -347,7 +347,7 @@ export class AtkHidClient {
       dpiLedMode: r1Extras?.dpiLedMode,
       dpiLedBrightness: r1Extras?.dpiLedBrightness,
       dpiLedSpeed: r1Extras?.dpiLedSpeed,
-      angleSnapping: this.isR1()
+      angleSnapping: this.isR1() || this.isF1Ultimate()
         ? advanced[6] === 1
         : angleSnapping === null ? null : angleSnapping === 1,
       angleTuning: angleTuning === null ? null : this.decodeAngle(angleTuning),
@@ -1007,7 +1007,7 @@ export class AtkHidClient {
       return confirmed;
     }
 
-    if (this.isR1()) {
+    if (this.isR1() || this.isF1Ultimate()) {
       return await this.setAdvancedFlag(
         6,
         enabled,
