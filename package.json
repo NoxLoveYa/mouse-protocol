@@ -113,6 +113,10 @@
       "types": "./dist/valkyrie/index.d.ts",
       "import": "./dist/valkyrie/index.js"
     },
+    "./vaxee": {
+      "types": "./dist/vaxee/index.d.ts",
+      "import": "./dist/vaxee/index.js"
+    },
     "./vgn": {
       "types": "./dist/vgn/index.d.ts",
       "import": "./dist/vgn/index.js"

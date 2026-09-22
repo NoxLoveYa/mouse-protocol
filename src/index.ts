@@ -26,6 +26,7 @@ export * as glorious from "./glorious/index.js";
 export * as ksnake from "./ksnake/index.js";
 export * as hyperx from "./hyperx/index.js";
 export * as valkyrie from "./valkyrie/index.js";
+export * as vaxee from "./vaxee/index.js";
 export * as incott from "./incott/index.js";
 export * as ryunix from "./ryunix/index.js";
 export * as redragon from "./redragon/index.js";
