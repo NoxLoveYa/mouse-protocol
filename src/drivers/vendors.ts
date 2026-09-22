@@ -5,11 +5,6 @@ import {
   ROG_GLADIUS_II_PRODUCT_ID,
 } from "../asus/index.ts";
 import { ATK_COMPX_PRODUCT_IDS } from "./atk/products.ts";
-import {
-  DUALSENSE_EDGE_PRODUCT_ID,
-  DUALSENSE_PRODUCT_ID,
-  DUALSENSE_VENDOR_ID,
-} from "@openmouse/controller-protocol/sony";
 import { MICROSOFT_PRODUCT_CLASSIC, MICROSOFT_PRODUCT_PRO, MICROSOFT_VENDOR_ID, MICROSOFT_CLASSIC_USAGE_PAGE, MICROSOFT_CLASSIC_USAGE, MICROSOFT_PRO_USAGE_PAGE, MICROSOFT_PRO_USAGE } from "../microsoft/index.ts";
 import { INCOTT_PRODUCT_IDS, INCOTT_USAGE_PAGE, INCOTT_VENDOR_ID } from "../incott/index.ts";
 import { EGG_WE_HID_FILTERS } from "./endgame/egg-we-control.ts";
@@ -160,13 +155,7 @@ export const VENDOR_ID = {
   incott: INCOTT_VENDOR_ID,
   hyperxKingston: HYPERX_VENDOR_ID_KINGSTON,
   hyperxHp: HYPERX_VENDOR_ID_HP,
-  sony: DUALSENSE_VENDOR_ID,
 } as const;
-
-/** DualSense and DualSense Edge, on the gamepad usage (Generic Desktop, Game Pad). */
-export const SONY_HID_FILTERS: HIDDeviceFilter[] = [DUALSENSE_PRODUCT_ID, DUALSENSE_EDGE_PRODUCT_ID].map(
-  (productId) => ({ vendorId: DUALSENSE_VENDOR_ID, productId, usagePage: 0x01, usage: 0x05 }),
-);
 
 /**
  * ROG Gladius II P502 configuration interface.
@@ -757,7 +746,6 @@ export const SUPPORTED_HID_FILTERS: HIDDeviceFilter[] = [
   ...EGG_WE_HID_FILTERS,
   ...MODDO_HID_FILTERS,
   ...WOOTING_HID_FILTERS,
-  ...SONY_HID_FILTERS,
   ...[...NINJUTSO_LEGACY_MOUSE_PRODUCT_IDS, ...NINJUTSO_LEGACY_RECEIVER_PRODUCT_IDS]
     .map((productId) => ({ vendorId: NINJUTSO_LEGACY_VENDOR_ID, productId })),
   ...[...NINJUTSO_MOUSE_PRODUCT_IDS, ...NINJUTSO_RECEIVER_PRODUCT_IDS]
