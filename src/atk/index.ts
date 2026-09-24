@@ -587,8 +587,6 @@ export function atkParseCompxFirmware(data: Uint8Array): AtkCompxFirmwareInfo {
 // captures/atk-f1-ultimate/ in the integration workspace (not committed).
 
 /** Sensor sampling-rate modes: 0 Basic, 1 Shard, 2 Shard MAX. */
-export const ATK_SENSOR_MODES = [0, 1, 2] as const;
-export type AtkSensorMode = (typeof ATK_SENSOR_MODES)[number];
 
 /** EEPROM address of the 6-byte sensor-performance row. */
 export const ATK_SENSOR_PERFORMANCE_REGISTER = 0x00b5;
@@ -640,15 +638,8 @@ export function atkDecodeAntiMistouch(value: number, checksum: number): number |
   return value * ATK_ANTI_MISTOUCH_STEP_MS;
 }
 
-/** Dongle LED effect command and modes. */
+/** Dongle LED effect command; modes are 0 off, 1 polling, 2 battery, 3 low battery. */
 export const ATK_DONGLE_LIGHT_COMMAND = 0x14;
-export const ATK_DONGLE_LIGHT_MODES = {
-  off: 0,
-  pollingRate: 1,
-  batteryGradient: 2,
-  lowBattery: 3,
-} as const;
-export type AtkDongleLightMode = (typeof ATK_DONGLE_LIGHT_MODES)[keyof typeof ATK_DONGLE_LIGHT_MODES];
 
 /** Build the 16-byte SetDongleLight frame for a mode, or null when invalid. */
 export function atkBuildDongleLight(mode: number): Uint8Array | null {

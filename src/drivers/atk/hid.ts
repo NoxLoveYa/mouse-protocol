@@ -761,7 +761,7 @@ export class AtkHidClient {
   }
 
   /** F1 Ultimate 2.0 (CID 1, MID 8): the verified PAW3950Ultra transport. */
-  isF1Ultimate(): boolean {
+  private isF1Ultimate(): boolean {
     return this.product === ATK_PRODUCTS["1,8"];
   }
 
